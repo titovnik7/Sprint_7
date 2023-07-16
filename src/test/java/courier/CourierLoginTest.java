@@ -7,7 +7,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class CourierLoginTest {
     private CourierCreate courier;
@@ -27,7 +27,7 @@ public class CourierLoginTest {
     }
 
     @After
-    public void cleanUp(){
+    public void cleanUp() {
         if (idCourier > 0)
             courierClient.deleteCourier(idCourier);
     }
@@ -35,7 +35,7 @@ public class CourierLoginTest {
     @Test
     @DisplayName("Успешная авторизация курьера")
     @Description("Проверка вход в систему с помощью логина и пароля")
-    public  void courierLogin(){
+    public void courierLogin() {
         courierClient.createCourier(courier);
         ValidatableResponse loginResponse = courierClient.loginCourier(CourierLogin.from(courier));
         idCourier = loginResponse.extract().path("id");
@@ -46,7 +46,7 @@ public class CourierLoginTest {
     @Test
     @DisplayName("Авторизации без указания логина")
     @Description("Проверка входа в систему без указания логина")
-    public  void  courierWithoutLogin(){
+    public void courierWithoutLogin() {
         courierClient.createCourier(courier);
         ValidatableResponse loginResponse = courierClient.loginCourier(courierWithoutLogin);
         int statusCode = loginResponse.extract().statusCode();
@@ -58,7 +58,7 @@ public class CourierLoginTest {
     @Test
     @DisplayName("Авторизации без указания пароля")
     @Description("Проверка входа в систему без указания пароля")
-    public  void  courierWithoutPassword(){
+    public void courierWithoutPassword() {
         courierClient.createCourier(courier);
         ValidatableResponse loginResponse = courierClient.loginCourier(courierWithoutPassword);
         int statusCode = loginResponse.extract().statusCode();
@@ -70,7 +70,7 @@ public class CourierLoginTest {
     @Test
     @DisplayName("Некорректные данные авторизации")
     @Description("Проверка входа в систему с некорректными данными авторизации")
-    public  void  courierIncorrectData(){
+    public void courierIncorrectData() {
         ValidatableResponse loginResponse = courierClient.loginCourier(courierIncorrectData);
         int statusCode = loginResponse.extract().statusCode();
         String messageResponse = loginResponse.extract().path("message");

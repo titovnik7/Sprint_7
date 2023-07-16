@@ -18,6 +18,7 @@ public class OrderListTest {
     public void setUp() {
         orderClient = new OrderClient();
     }
+
     @Test
     @DisplayName("Получение списка заказов")
     public void getOrderList() {

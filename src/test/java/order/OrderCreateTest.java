@@ -18,8 +18,8 @@ import static org.junit.Assert.assertEquals;
 
 @RunWith(Parameterized.class)
 public class OrderCreateTest {
-    private OrderClient orderClient;
     private static OrderCreate order;
+    private final String[] color;
     int track;
     int statusCode;
     Faker faker = new Faker(Locale.forLanguageTag("ru"));
@@ -31,7 +31,7 @@ public class OrderCreateTest {
     private final String rentTime = faker.regexify("[1-9]");
     private final String deliveryDate = faker.date().future(1, TimeUnit.HOURS).toInstant().toString();
     private final String comment = faker.name().username();
-    private final String[] color;
+    private OrderClient orderClient;
 
     public OrderCreateTest(OrderCreate order, String[] color, int statusCode) {
         this.order = order;
@@ -55,18 +55,18 @@ public class OrderCreateTest {
     }
 
     @After
-    public void cleanUp(){
+    public void cleanUp() {
         orderClient.deleteOrder(track);
     }
 
     @Test
     @DisplayName("Создание заказа")
-    public void orderCreated(){
+    public void orderCreated() {
         OrderCreate order = new OrderCreate(firstName, lastName, address, metroStation, phone, rentTime, deliveryDate, comment, color);
         ValidatableResponse responseCreate = orderClient.createOrder(order);
         int actualStatusCode = responseCreate.extract().statusCode();
         track = responseCreate.extract().path("track");
         assertThat(track, notNullValue());
-        assertEquals(statusCode,actualStatusCode);
+        assertEquals(statusCode, actualStatusCode);
     }
 }
